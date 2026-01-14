@@ -38,42 +38,61 @@
         // CONFIGURACIÓN: Cambia esto con tus datos de GitHub
         const USER = 'alfonso-fullnow';
         const REPO = 'dashboard-amazon';
-
+    
+        // Función para obtener el número de semana del año
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+    
+        // Mapeo de meses en español a números para la fecha
+        const monthMap = { 'Ene': 0, 'Feb': 1, 'Mar': 2, 'Abr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Ago': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dic': 11 };
+    
         async function loadReports() {
             try {
-                // Consultamos la lista de archivos del repositorio
                 const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/`);
                 const files = await response.json();
-
-                // Filtramos solo los archivos que empiezan con "Dashboard" y terminan en ".html"
-                const reports = files.filter(file => 
-                    file.name.startsWith('Dashboard') && 
-                    file.name.endsWith('.html')
-                );
-
-                // Ordenamos de forma descendente (el más nuevo primero)
-                // Esto funciona bien si mantienes el formato "Dashboard [Fecha]"
+    
+                // Filtrar archivos "Dashboard DD-DDMes.html"
+                const reports = files.filter(file => file.name.startsWith('Dashboard') && file.name.endsWith('.html'));
+    
+                // Ordenar: el más reciente primero
                 reports.sort((a, b) => b.name.localeCompare(a.name));
-
+    
                 const grid = document.getElementById('report-grid');
-                const loader = document.getElementById('loading');
-                
-                loader.style.display = 'none';
-
-                if (reports.length === 0) {
-                    grid.innerHTML = '<p class="text-center col-span-2 text-gray-500">No se encontraron archivos "Dashboard..."</p>';
-                    return;
-                }
-
+                document.getElementById('loading').style.display = 'none';
+    
                 reports.forEach(file => {
-                    // Limpiamos el nombre para mostrarlo bonito
-                    const displayName = file.name.replace('.html', '').replace('Dashboard ', '');
+                    // Lógica para extraer datos del nombre: "Dashboard 5-11Ene.html"
+                    // 1. Quitar el prefijo y sufijo
+                    let cleanName = file.name.replace('Dashboard ', '').replace('.html', '');
                     
+                    // 2. Extraer el día final y el mes (ej: de "5-11Ene" saca "11" y "Ene")
+                    let match = cleanName.match(/(\d+)-(\d+)([a-zA-Z]+)/);
+                    
+                    let weekLabel = "Semana ??";
+                    let yearLabel = "2026"; // Año por defecto según contexto actual
+    
+                    if (match) {
+                        let day = parseInt(match[2]);
+                        let monthStr = match[3];
+                        let monthIndex = monthMap[monthStr] || 0;
+                        
+                        // Crear objeto fecha para calcular la semana
+                        let reportDate = new Date(2026, monthIndex, day);
+                        weekLabel = "Semana " + getWeekNumber(reportDate);
+                        yearLabel = reportDate.getFullYear();
+                    }
+    
                     const card = `
                         <a href="${file.path}" class="report-card p-6 rounded-xl flex items-center justify-between group">
                             <div>
-                                <h3 class="text-xl font-bold group-hover:text-blue-400 transition-colors">Periodo:</h3>
-                                <p class="text-gray-400">${displayName}</p>
+                                <h3 class="text-2xl font-bold group-hover:text-blue-400 transition-colors">${weekLabel}</h3>
+                                <p class="text-gray-400 font-medium tracking-widest uppercase text-sm">${yearLabel}</p>
+                                <span class="text-[10px] text-gray-600 mt-2 block italic">${file.name}</span>
                             </div>
                             <div class="text-gray-500 group-hover:text-blue-400">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,13 +103,13 @@
                     `;
                     grid.innerHTML += card;
                 });
-
+    
             } catch (error) {
-                console.error("Error cargando reportes:", error);
-                document.getElementById('loading').innerHTML = '<p class="text-red-400">Error al conectar con GitHub</p>';
+                console.error("Error:", error);
+                document.getElementById('loading').innerHTML = '<p class="text-red-400">Error al cargar reportes</p>';
             }
         }
-
+    
         loadReports();
     </script>
 </body>

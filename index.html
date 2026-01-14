@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Dashboard | Ecommerce Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .report-card { 
+            background: #1e293b; 
+            transition: all 0.3s ease; 
+            border: 1px solid #334155;
+        }
+        .report-card:hover { 
+            transform: translateY(-5px); 
+            border-color: #3b82f6;
+            background: #263349;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                Archivo de Reportes Semanales
+            </h1>
+            <p class="text-gray-400 text-lg">Selecciona un periodo para visualizar el rendimiento global y análisis de competencia.</p>
+        </header>
+
+        <div class="mb-8 flex justify-center gap-4">
+            <span class="text-xs font-semibold px-3 py-1 bg-blue-900/30 text-blue-400 rounded-full border border-blue-800/50">Año 2026</span>
+            <span class="text-xs font-semibold px-3 py-1 bg-emerald-900/30 text-emerald-400 rounded-full border border-emerald-800/50">Actualizado</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="report-grid">
+            
+            <a href="Dashboard 5-11Ene.html" class="report-card p-6 rounded-xl flex items-center justify-between group">
+                <div>
+                    <h3 class="text-xl font-bold group-hover:text-blue-400 transition-colors">Semana 2</h3>
+                    <p class="text-gray-400">05 de Ene - 11 de Ene, 2026</p>
+                    <div class="mt-3 flex gap-2">
+                        <span class="text-[10px] bg-red-900/50 text-red-200 px-2 py-0.5 rounded">Refund Alert US</span>
+                        <span class="text-[10px] bg-green-900/50 text-green-200 px-2 py-0.5 rounded">IT/FR Success</span>
+                    </div>
+                </div>
+                <div class="text-gray-500 group-hover:text-blue-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+            </a>
+
+            <div class="report-card p-6 rounded-xl border-dashed opacity-50 flex items-center justify-center">
+                <p class="text-gray-500 italic">Próximo reporte: 12-18 Ene</p>
+            </div>
+
+        </div>
+
+        <footer class="mt-20 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+            <p>© 2026 Management Dashboard | Datos extraídos de Seller Central</p>
+        </footer>
+    </div>
+
+</body>
+</html>

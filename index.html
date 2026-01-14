@@ -39,75 +39,54 @@
         const USER = 'alfonso-fullnow';
         const REPO = 'dashboard-amazon';
     
-        const monthMap = { 'Ene': 0, 'Feb': 1, 'Mar': 2, 'Abr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Ago': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dic': 11 };
-    
-        function getWeekNumber(d) {
-            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-        }
-    
         async function loadReports() {
-            try {
-                const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/`);
-                const files = await response.json();
-                const reports = files.filter(file => file.name.startsWith('Dashboard') && file.name.endsWith('.html'));
+            const grid = document.getElementById('report-grid');
+            const loader = document.getElementById('loading');
     
-                // Ordenar de más reciente a más antiguo
+            try {
+                console.log("Iniciando petición a GitHub...");
+                const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Error desconocido');
+                }
+                
+                const files = await response.json();
+                console.log("Archivos encontrados:", files);
+    
+                // Filtrado estricto: archivos que terminen en .html y tengan la palabra Dashboard
+                const reports = files.filter(f => 
+                    f.name.toLowerCase().includes('dashboard') && 
+                    f.name.endsWith('.html')
+                );
+    
+                console.log("Reportes filtrados:", reports);
+    
+                if (reports.length === 0) {
+                    loader.innerHTML = `<span class="text-yellow-500">No se encontraron archivos con la palabra "Dashboard" en la raíz del repo.</span>`;
+                    return;
+                }
+    
+                loader.remove();
+                
+                // Ordenar por nombre (asumiendo formato Dashboard_Fecha)
                 reports.sort((a, b) => b.name.localeCompare(a.name));
     
-                const grid = document.getElementById('report-grid');
-                document.getElementById('loading').style.display = 'none';
-    
                 reports.forEach(file => {
-                    let cleanName = file.name.replace('Dashboard ', '').replace('.html', '');
-                    // Regex para capturar: inicio, fin y mes (ej: 29-4Ene)
-                    let match = cleanName.match(/(\d+)-(\d+)([a-zA-Z]+)/);
-                    
-                    let weekLabel = "Semana ??";
-                    let dateRange = cleanName;
-                    let year = 2026;
-    
-                    if (match) {
-                        let dayStart = match[1];
-                        let dayEnd = parseInt(match[2]);
-                        let monthStr = match[3];
-                        let monthIndex = monthMap[monthStr] || 0;
-                        
-                        // Cálculo basado en la fecha final (4 de Enero, 11 de Enero, etc.)
-                        let endDate = new Date(year, monthIndex, dayEnd);
-                        weekLabel = "Semana " + getWeekNumber(endDate);
-                        
-                        // Formateo de fecha para la sublinea (ej: 29 de Dic - 04 de Ene, 2026)
-                        // Para simplificar mostramos el rango original procesado
-                        dateRange = `${dayStart.padStart(2, '0')} de ... - ${dayEnd.padStart(2, '0')} de ${monthStr}, ${year}`;
-                    }
-    
-                    // Lógica simple para etiquetas (badges) basadas en el nombre
-                    let badges = '';
-                    if (file.name.includes('5-11Ene')) {
-                        badges = `
-                            <span class="text-[10px] bg-red-900/40 text-red-300 px-2 py-1 rounded font-medium mr-2">Refund Alert US</span>
-                            <span class="text-[10px] bg-green-900/40 text-green-300 px-2 py-1 rounded font-medium">IT/FR Success</span>
-                        `;
-                    } else if (file.name.includes('29Dic-4Ene')) {
-                        badges = `
-                            <span class="text-[10px] bg-yellow-900/40 text-yellow-300 px-2 py-1 rounded font-medium mr-2">PPC Ranking Push</span>
-                            <span class="text-[10px] bg-blue-900/40 text-blue-300 px-2 py-1 rounded font-medium">Year Transition</span>
-                        `;
-                    }
+                    // Creamos la URL correcta. Si usas GitHub Pages, la URL es f.name
+                    // Si estás en local, usamos f.download_url
+                    const reportUrl = file.name; 
     
                     const card = `
-                        <a href="${file.path}" class="report-card p-6 rounded-xl flex items-center justify-between group mb-4">
-                            <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">${weekLabel}</h3>
-                                <p class="text-gray-400 text-sm mb-3">${dateRange}</p>
-                                <div class="flex items-center">
-                                    ${badges}
-                                </div>
+                        <a href="${reportUrl}" class="report-card p-5 rounded-lg flex items-center justify-between group mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">
+                                    ${file.name.replace('.html', '')}
+                                </h3>
+                                <p class="text-slate-400 text-sm">Presiona para ver el reporte</p>
                             </div>
-                            <div class="text-gray-600 group-hover:text-white transition-colors">
+                            <div class="text-slate-600 group-hover:text-white transition-colors">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                 </svg>
@@ -116,10 +95,13 @@
                     `;
                     grid.innerHTML += card;
                 });
+    
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error detallado:", error);
+                loader.innerHTML = `<span class="text-red-400">Error: ${error.message}</span>`;
             }
         }
+    
         loadReports();
     </script>
 </body>

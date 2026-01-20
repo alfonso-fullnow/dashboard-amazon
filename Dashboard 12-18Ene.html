@@ -41,31 +41,31 @@
         </div>
         <div class="flex gap-2">
             <span class="badge badge-green">US Profit Recovery</span>
-            <span class="badge badge-green">IT Strong Sales</span>
+            <span class="badge badge-green">IT Strong Performance</span>
         </div>
     </div>
 
-    <!-- Top Metrics (Simulated/Calculated totals based on rows provided) -->
+    <!-- Top Metrics (Totales calculados sumando las tablas individuales) -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="card">
-            <p class="metric-label">Ventas Totales Est.</p>
-            <p class="metric-value">$360k+</p>
-            <p class="metric-sub text-green-400">Volumen estable</p>
+            <p class="metric-label">Ventas Totales</p>
+            <p class="metric-value">$332,255</p>
+            <p class="metric-sub text-green-400">~9,800 Unidades vendidas</p>
         </div>
         <div class="card">
-            <p class="metric-label">Net Profit (Total Est.)</p>
-            <p class="metric-value text-green-400">~$34,250</p>
-            <p class="metric-sub text-gray-400">Recuperación vs semana anterior</p>
+            <p class="metric-label">Net Profit (Total)</p>
+            <p class="metric-value text-green-400">$33,656</p>
+            <p class="metric-sub text-gray-400">ROI: Est. 11.2%</p>
         </div>
         <div class="card">
-            <p class="metric-label">US Bari Bag Profit</p>
-            <p class="metric-value text-green-400">$11,427</p>
-            <p class="metric-sub text-gray-400">Motor principal de US</p>
+            <p class="metric-label">Global TACOS</p>
+            <p class="metric-value text-yellow-400">13.50%</p>
+            <p class="metric-sub text-gray-400">Objetivo: 17.50%</p>
         </div>
         <div class="card border-blue-900">
-            <p class="metric-label">Estrategia Semanal</p>
-            <p class="metric-value text-blue-400">Dirección</p>
-            <p class="metric-sub text-gray-400">Gestión de stock (Variantes)</p>
+            <p class="metric-label">Global Margin</p>
+            <p class="metric-value text-blue-400">10.13%</p>
+            <p class="metric-sub text-gray-400">Objetivo: 14.28%</p>
         </div>
     </div>
 
@@ -78,7 +78,7 @@
             <div class="h-64">
                 <canvas id="profitMarketChart"></canvas>
             </div>
-            <p class="text-xs text-gray-400 mt-3 text-center">Italia domina. US vuelve a números verdes gracias a Bari Bag.</p>
+            <p class="text-xs text-gray-400 mt-3 text-center">Italia e Italia lideran. US recupera positivo gracias a Bari Bag.</p>
         </div>
 
         <div class="card">
@@ -163,7 +163,7 @@
     <script>
         // --- DATA ---
         // Datos extraídos para la semana 12 Ene - 18 Ene
-        // Conversiones aprox: EUR 1.05, GBP 1.25, CAD 0.72
+        // Conversiones aprox: EUR 1.05, GBP 1.22, CAD 0.70
         
         const products = [
             // US Data
@@ -175,15 +175,15 @@
             { mkt: 'US', name: 'Maps', rev: 395, profit: 2, status: 'Bad Rank - Poor Sales', decision: 'Mantener', crit: true },
             
             // CA Data (USD Values approx for chart logic)
-            { mkt: 'CA', name: 'Bari', rev: 2180, profit: 218, status: 'Bad Rank - Poor Sales', decision: 'Mantener', crit: true }, // CAD 3029, 304
-            { mkt: 'CA', name: 'Bari Bag', rev: 10243, profit: 1023, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, // CAD 14226, 1421
-            { mkt: 'CA', name: 'Napoli', rev: 5883, profit: 387, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, // CAD 8171, 537
-            { mkt: 'CA', name: 'Siena', rev: 64, profit: -92, status: 'Price/Rating Issue', decision: 'Mantener', crit: true }, // CAD 89, -128
+            { mkt: 'CA', name: 'Bari', rev: 2120, profit: 212, status: 'Bad Rank - Poor Sales', decision: 'Mantener', crit: true },
+            { mkt: 'CA', name: 'Bari Bag', rev: 9958, profit: 995, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'CA', name: 'Napoli', rev: 5720, profit: 376, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'CA', name: 'Siena', rev: 62, profit: -89, status: 'Price/Rating Issue', decision: 'Mantener', crit: true }, 
 
             // UK Data (GBP -> USD approx)
-            { mkt: 'UK', name: 'Bari', rev: 4344, profit: 483, status: 'Good Rank - Poor Sales', decision: 'Mantener', crit: false }, // GBP 3475, 386
-            { mkt: 'UK', name: 'Bari Bag', rev: 15336, profit: 262, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, // GBP 12269, 209
-            { mkt: 'UK', name: 'Napoli', rev: 11537, profit: 1742, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, // GBP 9230, 1393
+            { mkt: 'UK', name: 'Bari', rev: 4240, profit: 471, status: 'Good Rank - Poor Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'UK', name: 'Bari Bag', rev: 14968, profit: 256, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'UK', name: 'Napoli', rev: 11260, profit: 1700, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
 
             // EU Data (EUR -> USD approx)
             // IT
@@ -208,15 +208,14 @@
         ];
 
         // --- CHART 1: PROFIT BY MARKET (Estimated in USD) ---
-        // Summing up profits per market
-        // US: -1516 + 11427 - 991 - 723 - 1196 + 2 = 7,003
-        // CA: (304 + 1421 + 537 - 128) * 0.72 = 2134 * 0.72 = 1,536
-        // UK: (386 + 209 + 1393) * 1.25 = 1988 * 1.25 = 2,485
-        // DE: (593 + 187 + 1532) * 1.05 = 2312 * 1.05 = 2,427
-        // FR: (1764 + 1376 + 1510) * 1.05 = 4650 * 1.05 = 4,882
-        // IT: (7680 + 2633 + 2559) * 1.05 = 12872 * 1.05 = 13,515
-        // ES: (418 + 1617 + 263) * 1.05 = 2298 * 1.05 = 2,412
-        
+        // IT: (7680 + 2633 + 2559) * 1.05 = ~13,515
+        // US: -1516 + 11427 - 991 - 723 - 1196 + 2 = ~7,003
+        // FR: (1764 + 1376 + 1510) * 1.05 = ~4,882
+        // UK: (386 + 209 + 1393) * 1.22 = ~2,425
+        // DE: (593 + 187 + 1532) * 1.05 = ~2,427
+        // ES: (418 + 1617 + 263) * 1.05 = ~2,412
+        // CA: (304 + 1421 + 537 - 128) * 0.70 = ~1,493
+
         const ctxMkt = document.getElementById('profitMarketChart').getContext('2d');
         new Chart(ctxMkt, {
             type: 'bar',
@@ -224,7 +223,7 @@
                 labels: ['IT', 'US', 'FR', 'UK', 'DE', 'ES', 'CA'],
                 datasets: [{
                     label: 'Profit Real (USD Est.)',
-                    data: [13515, 7003, 4882, 2485, 2427, 2412, 1536],
+                    data: [13515, 7003, 4882, 2425, 2427, 2412, 1493],
                     backgroundColor: [
                         '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981'
                     ],

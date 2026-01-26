@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Fullnow - Sem 4, 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #111827; color: #f3f4f6; font-family: 'Inter', sans-serif; }
+        .card { background-color: #1f2937; border: 1px solid #374151; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .metric-label { color: #9ca3af; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: white; }
+        .metric-sub { font-size: 0.75rem; margin-top: 0.5rem; }
+        
+        /* Badges */
+        .badge { padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .badge-red { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
+        .badge-green { background-color: #14532d; color: #86efac; border: 1px solid #15803d; }
+        .badge-yellow { background-color: #713f12; color: #fde047; border: 1px solid #a16207; }
+
+        /* Table */
+        th { color: #d1d5db; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+        td { color: #e5e7eb; font-size: 0.875rem; vertical-align: middle; }
+        tr:hover td { background-color: #374151; }
+        
+        /* Competitor Cards */
+        .comp-card { background-color: #283040; border-left: 4px solid; padding: 15px; margin-bottom: 10px; border-radius: 6px; }
+        .comp-card.price { border-color: #facc15; }
+        .comp-card.rating { border-color: #f87171; }
+        .comp-card.listing { border-color: #60a5fa; }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-7xl mx-auto">
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Dashboard Semanal de Rendimiento</h1>
+            <p class="text-gray-400 mt-1">Periodo: 19 Enero - 25 Enero, 2026 | <span class="text-blue-400">Vista Ejecutiva</span></p>
+        </div>
+        <div class="flex gap-2">
+            <span class="badge badge-green">US #1 Profit Driver</span>
+            <span class="badge badge-yellow">High TACOS (Aggressive)</span>
+        </div>
+    </div>
+
+    <!-- Top Metrics (Totales calculados sumando las tablas individuales) -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="card">
+            <p class="metric-label">Ventas Totales</p>
+            <p class="metric-value">$342,762</p>
+            <p class="metric-sub text-green-400">~9,600 Unidades vendidas</p>
+        </div>
+        <div class="card">
+            <p class="metric-label">Net Profit (Total)</p>
+            <p class="metric-value text-green-400">$40,049</p>
+            <p class="metric-sub text-gray-400">ROI: Est. 11.6%</p>
+        </div>
+        <div class="card">
+            <p class="metric-label">Global TACOS</p>
+            <p class="metric-value text-red-400">19.2%</p>
+            <p class="metric-sub text-gray-400">Impactado por defensa vs Sohida</p>
+        </div>
+        <div class="card border-blue-900">
+            <p class="metric-label">Global Margin</p>
+            <p class="metric-value text-blue-400">11.68%</p>
+            <p class="metric-sub text-gray-400">US Bari Bag lidera recuperación</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card">
+            <div class="flex justify-between mb-4">
+                <h3 class="font-bold text-lg">Profit Real por Mercado (USD Est.)</h3>
+                <span class="text-xs text-gray-500">*Conversión divisa aplicada</span>
+            </div>
+            <div class="h-64">
+                <canvas id="profitMarketChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-400 mt-3 text-center">US recupera el trono de rentabilidad ($15k). Italia sigue fuerte.</p>
+        </div>
+
+        <div class="card">
+            <h3 class="font-bold text-lg mb-4">Mapa de Rendimiento (Todos los Mercados)</h3>
+            <div class="h-64">
+                <canvas id="scatterChart"></canvas>
+            </div>
+            <div class="flex justify-center gap-4 mt-2 text-xs text-gray-400">
+                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-green-500"></div> Rentable</div>
+                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-red-500"></div> Pérdida</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        <div class="card lg:col-span-1">
+            <h3 class="font-bold text-lg mb-4 text-white flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Amenazas Competitivas
+            </h3>
+            
+            <div class="comp-card price">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Agresividad de Competencia</span>
+                    <span class="text-xs text-red-400 font-bold">US</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1"><strong>Sohida</strong> tiene deal a $17.99 vs nuestros $39.99.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Debemos bajar margen y apretar PPC para recuperar #1 en US Bari Bag."</p>
+                <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Impacto: TACOS Global ↑</div>
+            </div>
+
+            <div class="comp-card rating">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Problema de Ratings</span>
+                    <span class="text-xs text-yellow-400 font-bold">US/CA</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1"><strong>Aotto, Rottogoon</strong> (4.5★) vs Siena (4.0★).</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Precio descontado no es suficiente si no mejoran las reviews."</p>
+                <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Status: Crítico</div>
+            </div>
+
+            <div class="comp-card listing">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Estrategia PPC</span>
+                    <span class="text-xs text-blue-400 font-bold">Ranking</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1">Margen negativo en <strong>Palermo</strong> y <strong>Siena CA</strong>.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Inversión agresiva para generar tráfico y posicionamiento."</p>
+            </div>
+        </div>
+
+        <div class="card lg:col-span-2 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Estado de Productos y Decisiones</h3>
+                <div class="flex gap-1">
+                    <button onclick="filterTable('all')" class="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded text-white">Todos</button>
+                    <button onclick="filterTable('US')" class="px-3 py-1 text-xs bg-blue-900 hover:bg-blue-800 rounded text-blue-100">US</button>
+                    <button onclick="filterTable('EU')" class="px-3 py-1 text-xs bg-indigo-900 hover:bg-indigo-800 rounded text-indigo-100">EU</button>
+                    <button onclick="filterTable('CA')" class="px-3 py-1 text-xs bg-red-900 hover:bg-red-800 rounded text-red-100">CA</button>
+                </div>
+            </div>
+            
+            <div class="overflow-y-auto pr-2" style="max-height: 400px;">
+                <table class="w-full text-left">
+                    <thead class="sticky top-0 bg-gray-800 z-10">
+                        <tr>
+                            <th class="p-3">Mkt</th>
+                            <th class="p-3">Producto</th>
+                            <th class="p-3">Status / Problema</th>
+                            <th class="p-3">Decisión Tomada</th>
+                            <th class="p-3 text-center">Nivel</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody" class="divide-y divide-gray-700 text-sm">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Datos extraídos para la semana 19 Ene - 25 Ene
+        // Conversiones aprox: EUR 1.05, GBP 1.22, CAD 0.70
+        
+        const products = [
+            // US Data
+            { mkt: 'US', name: 'Bari', rev: 3377, profit: -833, status: 'Bad Rank - Poor Sales', decision: 'Bajar precio a $24.99 (DG/Neon)', crit: true },
+            { mkt: 'US', name: 'Bari Bag', rev: 127968, profit: 18397, status: 'Good Rank - Great Sales', decision: 'Bajar margen al 18% (vs Sohida)', crit: false },
+            { mkt: 'US', name: 'Napoli', rev: 18207, profit: 94, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 14%', crit: false },
+            { mkt: 'US', name: 'Siena', rev: 1775, profit: -1188, status: 'Rating Issue (4.0)', decision: 'Mantener precio bajo', crit: true },
+            { mkt: 'US', name: 'Palermo', rev: 69, profit: -1103, status: 'Not Indexed', decision: 'Margen -50% (PPC)', crit: true },
+            { mkt: 'US', name: 'Maps', rev: 251, profit: 17, status: 'Bad Rank - Poor Sales', decision: 'Mantener', crit: true },
+            
+            // CA Data (USD Values approx for chart logic)
+            { mkt: 'CA', name: 'Bari', rev: 2030, profit: 300, status: 'Bad Rank - Poor Sales', decision: 'Bajar margen al 13%', crit: true },
+            { mkt: 'CA', name: 'Bari Bag', rev: 12036, profit: 1924, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'CA', name: 'Napoli', rev: 7140, profit: 974, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'CA', name: 'Siena', rev: 31, profit: -90, status: 'Price/Rating Issue', decision: 'Precio CA$39.99 / Margen -50%', crit: true }, 
+
+            // UK Data (GBP -> USD approx)
+            { mkt: 'UK', name: 'Bari', rev: 2516, profit: 23, status: 'Good Rank - Poor Sales', decision: 'Bajar precio a £24.99', crit: true }, 
+            { mkt: 'UK', name: 'Bari Bag', rev: 13821, profit: 709, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            { mkt: 'UK', name: 'Napoli', rev: 9061, profit: 1304, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+
+            // EU Data (EUR -> USD approx)
+            // IT
+            { mkt: 'IT', name: 'Bari', rev: 35749, profit: 5189, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
+            { mkt: 'IT', name: 'Bari Bag', rev: 14612, profit: 2635, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
+            { mkt: 'IT', name: 'Napoli', rev: 18134, profit: 2846, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
+
+            // FR
+            { mkt: 'FR', name: 'Bari', rev: 11176, profit: 1354, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
+            { mkt: 'FR', name: 'Bari Bag', rev: 7066, profit: 1039, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
+            { mkt: 'FR', name: 'Napoli', rev: 9728, profit: 1310, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
+
+            // DE
+            { mkt: 'DE', name: 'Bari', rev: 4603, profit: 584, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
+            { mkt: 'DE', name: 'Bari Bag', rev: 5538, profit: 659, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
+            { mkt: 'DE', name: 'Napoli', rev: 9444, profit: 1678, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
+
+            // ES
+            { mkt: 'ES', name: 'Bari', rev: 6024, profit: 171, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 11%', crit: false },
+            { mkt: 'ES', name: 'Bari Bag', rev: 16688, profit: 1978, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
+            { mkt: 'ES', name: 'Napoli', rev: 5715, profit: -14, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 11%', crit: true }
+        ];
+
+        // --- CHART 1: PROFIT BY MARKET (Estimated in USD) ---
+        // US: -833 + 18397 + 94 - 1188 - 1103 + 17 = 15,384
+        // IT: (4942 + 2509 + 2711) * 1.05 = ~10,670
+        // FR: (1290 + 990 + 1248) * 1.05 = ~3,704
+        // CA: (428 + 2749 + 1392 + 2) * 0.70 = ~3,200
+        // DE: (557 + 627 + 1598) * 1.05 = ~2,921
+        // ES: (163 + 1883 - 13) * 1.05 = ~2,135
+        // UK: (19 + 581 + 1068) * 1.22 = ~2,035
+
+        const ctxMkt = document.getElementById('profitMarketChart').getContext('2d');
+        new Chart(ctxMkt, {
+            type: 'bar',
+            data: {
+                labels: ['US', 'IT', 'FR', 'CA', 'DE', 'ES', 'UK'],
+                datasets: [{
+                    label: 'Profit Real (USD Est.)',
+                    data: [15384, 10670, 3704, 3200, 2921, 2135, 2035],
+                    backgroundColor: [
+                        '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#374151' }, ticks: { color: '#9ca3af', callback: v => '$' + v } },
+                    x: { grid: { display: false }, ticks: { color: '#fff', font: { weight: 'bold' } } }
+                }
+            }
+        });
+
+        // --- CHART 2: SCATTER PLOT ALL PRODUCTS ---
+        const scatterData = products.map(p => ({
+            x: p.rev, 
+            y: p.profit,
+            label: `${p.mkt} ${p.name}`,
+            bg: p.profit > 0 ? '#10b981' : '#ef4444'
+        }));
+
+        const ctxScatter = document.getElementById('scatterChart').getContext('2d');
+        new Chart(ctxScatter, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Productos',
+                    data: scatterData,
+                    backgroundColor: c => c.raw.bg,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleColor: '#fff',
+                        bodyColor: '#d1d5db',
+                        callbacks: {
+                            label: (ctx) => {
+                                const p = ctx.raw;
+                                return `${p.label}: Rev ${p.x.toLocaleString()} | Profit ${p.y.toLocaleString()}`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { 
+                        type: 'logarithmic', 
+                        title: { display: true, text: 'Revenue (Log Scale)', color: '#6b7280' },
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af', callback: v => v.toLocaleString() }
+                    },
+                    y: { 
+                        title: { display: true, text: 'Profit (Local Curr)', color: '#6b7280' },
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // --- TABLE LOGIC ---
+        const tableBody = document.getElementById('productsBody');
+
+        function renderTable(filter) {
+            tableBody.innerHTML = '';
+            let filteredProducts = products;
+            
+            if (filter !== 'all') {
+                if (filter === 'EU') {
+                    filteredProducts = products.filter(p => ['UK','IT','FR','DE','ES'].includes(p.mkt));
+                } else {
+                    filteredProducts = products.filter(p => p.mkt === filter);
+                }
+            }
+
+            filteredProducts.forEach(p => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 last:border-0 hover:bg-gray-800 transition-colors';
+                
+                // Determine Badge
+                let badge = p.crit 
+                    ? `<span class="badge badge-red">🚨 Critical</span>` 
+                    : `<span class="badge badge-green">🚀 Top</span>`;
+                
+                // Override if profitable but not critical
+                if(!p.crit && p.profit < 0) badge = `<span class="badge badge-yellow">⚠️ Watch</span>`;
+
+                row.innerHTML = `
+                    <td class="p-3"><span class="font-bold text-gray-400">${p.mkt}</span></td>
+                    <td class="p-3 font-bold text-white">${p.name}</td>
+                    <td class="p-3 text-gray-300 text-xs">${p.status}</td>
+                    <td class="p-3 text-blue-300 text-xs">${p.decision}</td>
+                    <td class="p-3 text-center">${badge}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterTable(region) {
+            renderTable(region);
+        }
+
+        // Init
+        renderTable('all');
+
+    </script>
+</body>
+</html>

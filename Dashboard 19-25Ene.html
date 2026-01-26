@@ -19,6 +19,7 @@
         .badge-red { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
         .badge-green { background-color: #14532d; color: #86efac; border: 1px solid #15803d; }
         .badge-yellow { background-color: #713f12; color: #fde047; border: 1px solid #a16207; }
+        .badge-blue { background-color: #1e3a8a; color: #93c5fd; border: 1px solid #1d4ed8; }
 
         /* Table */
         th { color: #d1d5db; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
@@ -60,12 +61,12 @@
         <div class="card">
             <p class="metric-label">Global TACOS</p>
             <p class="metric-value text-red-400">19.2%</p>
-            <p class="metric-sub text-gray-400">Impactado por defensa vs Sohida</p>
+            <p class="metric-sub text-gray-400">Objetivo: 18.89%</p>
         </div>
         <div class="card border-blue-900">
             <p class="metric-label">Global Margin</p>
             <p class="metric-value text-blue-400">11.68%</p>
-            <p class="metric-sub text-gray-400">US Bari Bag lidera recuperación</p>
+            <p class="metric-sub text-gray-400">Objetivo: 13.58%</p>
         </div>
     </div>
 
@@ -104,10 +105,10 @@
             <div class="comp-card price">
                 <div class="flex justify-between">
                     <span class="font-bold text-sm text-white">Agresividad de Competencia</span>
-                    <span class="text-xs text-red-400 font-bold">US</span>
+                    <span class="text-xs text-red-400 font-bold">EU</span>
                 </div>
-                <p class="text-xs text-gray-300 mt-1"><strong>Sohida</strong> tiene deal a $17.99 vs nuestros $39.99.</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"Debemos bajar margen y apretar PPC para recuperar #1 en US Bari Bag."</p>
+                <p class="text-xs text-gray-300 mt-1"><strong>Anykuu</strong> bajando precios para posicionarse en el top.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Debemos bajar margenes y apretar PPC para recuperar ranking perdido en algunos mercados."</p>
                 <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Impacto: TACOS Global ↑</div>
             </div>
 
@@ -116,8 +117,8 @@
                     <span class="font-bold text-sm text-white">Problema de Ratings</span>
                     <span class="text-xs text-yellow-400 font-bold">US/CA</span>
                 </div>
-                <p class="text-xs text-gray-300 mt-1"><strong>Aotto, Rottogoon</strong> (4.5★) vs Siena (4.0★).</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"Precio descontado no es suficiente si no mejoran las reviews."</p>
+                <p class="text-xs text-gray-300 mt-1">Competidores con 4.4-4.6★ vs Siena (3.8-3.9★</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Precio descontado no es suficiente si no mejoran las reviews. Hemos recibido nuevas calificaciones negativas"</p>
                 <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Status: Crítico</div>
             </div>
 
@@ -127,7 +128,7 @@
                     <span class="text-xs text-blue-400 font-bold">Ranking</span>
                 </div>
                 <p class="text-xs text-gray-300 mt-1">Margen negativo en <strong>Palermo</strong> y <strong>Siena CA</strong>.</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"Inversión agresiva para generar tráfico y posicionamiento."</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Inversión agresiva para generar tráfico y posicionamiento. Margen deseado -50%."</p>
             </div>
         </div>
 
@@ -166,45 +167,44 @@
         // Conversiones aprox: EUR 1.05, GBP 1.22, CAD 0.70
         
         const products = [
-            // US Data
-            { mkt: 'US', name: 'Bari', rev: 3377, profit: -833, status: 'Bad Rank - Poor Sales', decision: 'Bajar precio a $24.99 (DG/Neon)', crit: true },
-            { mkt: 'US', name: 'Bari Bag', rev: 127968, profit: 18397, status: 'Good Rank - Great Sales', decision: 'Bajar margen al 18% (vs Sohida)', crit: false },
-            { mkt: 'US', name: 'Napoli', rev: 18207, profit: 94, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 14%', crit: false },
-            { mkt: 'US', name: 'Siena', rev: 1775, profit: -1188, status: 'Rating Issue (4.0)', decision: 'Mantener precio bajo', crit: true },
-            { mkt: 'US', name: 'Palermo', rev: 69, profit: -1103, status: 'Not Indexed', decision: 'Margen -50% (PPC)', crit: true },
-            { mkt: 'US', name: 'Maps', rev: 251, profit: 17, status: 'Bad Rank - Poor Sales', decision: 'Mantener', crit: true },
+            // US Data (19-25 Ene)
+            { mkt: 'US', name: 'Bari', rev: 3377, profit: -833, status: 'High CVR / Low Traffic', decision: 'Mantener (Conversión alta)', level: 'improving' },
+            { mkt: 'US', name: 'Bari Bag', rev: 127968, profit: 18397, status: 'Dominating Category (#1)', decision: 'Mantener (#1)', level: 'top' },
+            { mkt: 'US', name: 'Napoli', rev: 18207, profit: 94, status: 'Price War / Margin Squeeze', decision: 'Bajar margen al 14%', level: 'watch' },
+            { mkt: 'US', name: 'Siena', rev: 1775, profit: -1188, status: 'Rating Limiting Sales (3.9)', decision: 'Mantener precio bajo', level: 'critical' },
+            { mkt: 'US', name: 'Palermo', rev: 69, profit: -1103, status: 'Invisible / Not Indexed', decision: 'Margen -50% (PPC Aggressive)', level: 'critical' },
+            { mkt: 'US', name: 'Maps', rev: 251, profit: 17, status: 'Low Vol / Break-even', decision: 'Mantener', level: 'watch' },
             
-            // CA Data (USD Values approx for chart logic)
-            { mkt: 'CA', name: 'Bari', rev: 2030, profit: 300, status: 'Bad Rank - Poor Sales', decision: 'Bajar margen al 13%', crit: true },
-            { mkt: 'CA', name: 'Bari Bag', rev: 12036, profit: 1924, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
-            { mkt: 'CA', name: 'Napoli', rev: 7140, profit: 974, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
-            { mkt: 'CA', name: 'Siena', rev: 31, profit: -90, status: 'Price/Rating Issue', decision: 'Precio CA$39.99 / Margen -50%', crit: true }, 
+            // CA Data (19-25 Ene)
+            { mkt: 'CA', name: 'Bari', rev: 2900, profit: 428, status: 'Profitable / Low Rank', decision: 'Bajar margen al 13%', level: 'improving' },
+            { mkt: 'CA', name: 'Bari Bag', rev: 17194, profit: 2749, status: 'Dominating Category (#1)', decision: 'Mantener', level: 'top' },
+            { mkt: 'CA', name: 'Napoli', rev: 10200, profit: 1392, status: 'Strong #2 / Solid Profit', decision: 'Mantener', level: 'top' },
+            { mkt: 'CA', name: 'Siena', rev: 45, profit: 2, status: 'No Traction / Rating Issue', decision: 'Precio CA$39.99 / Margen -50%', level: 'critical' },
 
-            // UK Data (GBP -> USD approx)
-            { mkt: 'UK', name: 'Bari', rev: 2516, profit: 23, status: 'Good Rank - Poor Sales', decision: 'Bajar precio a £24.99', crit: true }, 
-            { mkt: 'UK', name: 'Bari Bag', rev: 13821, profit: 709, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
-            { mkt: 'UK', name: 'Napoli', rev: 9061, profit: 1304, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false }, 
+            // UK Data (19-25 Ene)
+            { mkt: 'UK', name: 'Bari', rev: 2063, profit: 19, status: 'Lost Rank / Low Views', decision: 'Bajar precio a £24.99', level: 'watch' },
+            { mkt: 'UK', name: 'Bari Bag', rev: 11329, profit: 581, status: 'Top Rank / Low Margin', decision: 'Mantener', level: 'top' },
+            { mkt: 'UK', name: 'Napoli', rev: 7427, profit: 1068, status: 'Stable #2 / Profitable', decision: 'Mantener', level: 'top' },
 
-            // EU Data (EUR -> USD approx)
-            // IT
-            { mkt: 'IT', name: 'Bari', rev: 35749, profit: 5189, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
-            { mkt: 'IT', name: 'Bari Bag', rev: 14612, profit: 2635, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
-            { mkt: 'IT', name: 'Napoli', rev: 18134, profit: 2846, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
+            // DE Data (19-25 Ene)
+            { mkt: 'DE', name: 'Bari', rev: 4383, profit: 557, status: 'Recovering / Price Pressure', decision: 'Mantener', level: 'improving' },
+            { mkt: 'DE', name: 'Bari Bag', rev: 5274, profit: 627, status: 'Stable / Mid-Rank', decision: 'Mantener', level: 'watch' },
+            { mkt: 'DE', name: 'Napoli', rev: 8994, profit: 1598, status: 'Dominating Category (#1)', decision: 'Mantener', level: 'top' },
 
-            // FR
-            { mkt: 'FR', name: 'Bari', rev: 11176, profit: 1354, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
-            { mkt: 'FR', name: 'Bari Bag', rev: 7066, profit: 1039, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
-            { mkt: 'FR', name: 'Napoli', rev: 9728, profit: 1310, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
+            // FR Data (19-25 Ene)
+            { mkt: 'FR', name: 'Bari', rev: 10644, profit: 1290, status: 'High Volume / Rank #2', decision: 'Mantener', level: 'top' },
+            { mkt: 'FR', name: 'Bari Bag', rev: 6729, profit: 990, status: 'Consistent Profit', decision: 'Mantener', level: 'top' },
+            { mkt: 'FR', name: 'Napoli', rev: 9265, profit: 1248, status: 'Solid Performance', decision: 'Mantener', level: 'top' },
 
-            // DE
-            { mkt: 'DE', name: 'Bari', rev: 4603, profit: 584, status: 'Bad Rank - Great Sales', decision: 'Mantener', crit: false },
-            { mkt: 'DE', name: 'Bari Bag', rev: 5538, profit: 659, status: 'Good Rank - Great Sales', decision: 'Mantener', crit: false },
-            { mkt: 'DE', name: 'Napoli', rev: 9444, profit: 1678, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
+            // IT Data (19-25 Ene)
+            { mkt: 'IT', name: 'Bari', rev: 34047, profit: 4942, status: 'Cash Cow / High Vol', decision: 'Mantener', level: 'top' },
+            { mkt: 'IT', name: 'Bari Bag', rev: 13916, profit: 2509, status: 'Good Profitability', decision: 'Mantener', level: 'top' },
+            { mkt: 'IT', name: 'Napoli', rev: 17270, profit: 2711, status: 'Strong Sales & Profit', decision: 'Mantener', level: 'top' },
 
-            // ES
-            { mkt: 'ES', name: 'Bari', rev: 6024, profit: 171, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 11%', crit: false },
-            { mkt: 'ES', name: 'Bari Bag', rev: 16688, profit: 1978, status: 'Good Rank - #1', decision: 'Mantener', crit: false },
-            { mkt: 'ES', name: 'Napoli', rev: 5715, profit: -14, status: 'Bad Rank - Great Sales', decision: 'Bajar margen al 11%', crit: true }
+            // ES Data (19-25 Ene)
+            { mkt: 'ES', name: 'Bari', rev: 5738, profit: 163, status: 'Low Margin / Slipping', decision: 'Bajar margen al 11%', level: 'watch' },
+            { mkt: 'ES', name: 'Bari Bag', rev: 15894, profit: 1883, status: 'Dominating Category (#1)', decision: 'Mantener', level: 'top' },
+            { mkt: 'ES', name: 'Napoli', rev: 5443, profit: -13, status: 'Negative Profit / Price War', decision: 'Bajar margen al 11%', level: 'critical' }
         ];
 
         // --- CHART 1: PROFIT BY MARKET (Estimated in USD) ---
@@ -313,13 +313,21 @@
                 const row = document.createElement('tr');
                 row.className = 'border-b border-gray-700 last:border-0 hover:bg-gray-800 transition-colors';
                 
-                // Determine Badge
-                let badge = p.crit 
-                    ? `<span class="badge badge-red">🚨 Critical</span>` 
-                    : `<span class="badge badge-green">🚀 Top</span>`;
-                
-                // Override if profitable but not critical
-                if(!p.crit && p.profit < 0) badge = `<span class="badge badge-yellow">⚠️ Watch</span>`;
+                // Determine Badge based on 'level' property
+                let badge = '';
+                switch(p.level) {
+                    case 'critical':
+                        badge = `<span class="badge badge-red">🚨 Critical</span>`;
+                        break;
+                    case 'top':
+                        badge = `<span class="badge badge-green">🚀 Top</span>`;
+                        break;
+                    case 'improving':
+                        badge = `<span class="badge badge-blue">📈 Improving</span>`;
+                        break;
+                    default:
+                        badge = `<span class="badge badge-yellow">⚠️ Watch</span>`;
+                }
 
                 row.innerHTML = `
                     <td class="p-3"><span class="font-bold text-gray-400">${p.mkt}</span></td>

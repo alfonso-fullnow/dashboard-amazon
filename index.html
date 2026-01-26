@@ -8,70 +8,98 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #0f172a; font-family: 'Inter', sans-serif; }
-        .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+        
+        .report-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); 
+            gap: 1.5rem; 
+        }
+
+        /* Estilo de tarjeta basado en tu imagen */
         .report-card { 
-            background: #1e293b; 
-            border: 1px solid #334155; 
-            border-radius: 12px;
+            background-color: #1e293b; /* Slate 800 */
+            border: 1px solid #334155; /* Slate 700 */
+            border-radius: 16px;
             padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: all 0.2s ease-in-out;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
         }
+
         .report-card:hover { 
-            transform: translateY(-3px); 
-            border-color: #3b82f6; 
-            background: #263349; 
+            border-color: #3b82f6; /* Blue 500 */
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
-        /* Estilos heredados para los badges extraídos */
+
+        .card-title { font-size: 1.5rem; font-weight: 700; color: white; line-height: 1.2; }
+        .card-subtitle { color: #94a3b8; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 1rem; }
+
+        /* Badges estilo imagen */
         .badge {
-            padding: 2px 8px;
-            border-radius: 9999px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-weight: 600;
             display: inline-block;
-            white-space: nowrap;
+            margin-right: 0.5rem;
         }
-        .badge-red { background-color: rgba(127, 29, 29, 0.3); color: #fca5a5; border: 1px solid rgba(185, 28, 28, 0.5); }
-        .badge-green { background-color: rgba(20, 83, 45, 0.3); color: #86efac; border: 1px solid rgba(21, 128, 61, 0.5); }
-        .badge-yellow { background-color: rgba(113, 63, 18, 0.3); color: #fde047; border: 1px solid rgba(161, 98, 7, 0.5); }
-        .badge-blue { background-color: rgba(30, 58, 138, 0.3); color: #93c5fd; border: 1px solid rgba(29, 78, 216, 0.5); }
+        /* Colores específicos para simular la imagen */
+        .badge-red, .badge[class*="bg-red"] { 
+            background-color: #451a1a !important; 
+            color: #fca5a5 !important; 
+            border: 1px solid #7f1d1d !important;
+        }
+        .badge-green, .badge[class*="bg-green"] { 
+            background-color: #143525 !important; 
+            color: #86efac !important; 
+            border: 1px solid #14532d !important;
+        }
+        .badge-yellow, .badge[class*="bg-yellow"] { 
+            background-color: #422006 !important; 
+            color: #fde047 !important; 
+            border: 1px solid #713f12 !important;
+        }
+        .badge-blue, .badge[class*="bg-blue"] { 
+            background-color: #172554 !important; 
+            color: #93c5fd !important; 
+            border: 1px solid #1e3a8a !important;
+        }
+
+        .arrow-icon { color: #64748b; width: 24px; height: 24px; transition: color 0.2s; }
+        .report-card:hover .arrow-icon { color: #3b82f6; }
     </style>
 </head>
 <body class="min-h-screen text-slate-200 p-6 md:p-12">
 
-    <div class="max-w-7xl mx-auto">
-        <header class="text-center mb-16">
-            <h1 class="text-4xl font-bold text-teal-400 mb-4 tracking-tight">Archivo de Reportes Semanales</h1>
-            <p class="text-slate-400">Selecciona un periodo para visualizar el rendimiento global y análisis de competencia</p>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12">
+            <h1 class="text-4xl font-bold text-white mb-2 tracking-tight">Archivo de Reportes Semanales</h1>
+            <p class="text-slate-400 text-lg">Selecciona un periodo para visualizar el rendimiento global y análisis de competencia</p>
         </header>
 
         <div id="report-grid" class="report-grid">
-            <div id="loading" class="col-span-full flex justify-center items-center gap-3 text-slate-500 py-20">
-                <svg class="animate-spin h-5 w-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <div id="loading" class="col-span-full flex items-center gap-3 text-slate-500 py-10">
+                <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span>Sincronizando reportes...</span>
+                <span>Cargando reportes...</span>
             </div>
         </div>
 
-        <footer class="mt-24 pt-8 border-t border-slate-800 text-center text-slate-500 text-xs">
-            <p>© 2026 Management Dashboard | Datos extraídos de KPI sheet</p>
+        <footer class="mt-24 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+            <p>© 2026 Management Dashboard | Datos extraídos de la 'KPI sheet'</p>
         </footer>
     </div>
 
     <script>
-        // CONFIGURACIÓN
         const USER = 'alfonso-fullnow';
         const REPO = 'dashboard-amazon';
-        
-        // Mapeo de meses para ordenamiento
         const monthMap = { 'Ene': 0, 'Feb': 1, 'Mar': 2, 'Abr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Ago': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dic': 11 };
 
-        // Función para calcular número de semana
         function getWeekNumber(d) {
             d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
             d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -79,108 +107,99 @@
             return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
         }
 
-        // Función para extraer fecha del nombre del archivo y devolver objeto Date
         function parseDateFromFilename(filename) {
-            // Regex para capturar: Dashboard 29Dic-4Ene.html ó Dashboard 5-11Ene.html
-            // Nos centramos en la fecha FINAL (grupo 2 y 3) para ordenar cronológicamente
+            // Regex para capturar rangos como "29Dic-4Ene" o "5-11Ene"
             const match = filename.match(/(\d+)(?:[a-zA-Z]+)?-(\d+)([a-zA-Z]+)/);
             
             if (match) {
+                const dayStart = parseInt(match[1]);
                 const dayEnd = parseInt(match[2]);
                 const monthStr = match[3];
                 const monthIndex = monthMap[monthStr];
                 
-                // Lógica simple de año: Si es Dic es 2025, si es Ene-Nov es 2026
-                // Ajustar esto si el dashboard dura más de un año
+                // Lógica de año: Dic se asume año anterior (2025), Ene en adelante 2026
                 const year = (monthStr === 'Dic') ? 2025 : 2026;
-                
-                return new Date(year, monthIndex, dayEnd);
+                const prevYear = (monthStr === 'Ene' && dayStart > dayEnd) ? 2025 : year;
+
+                // Formatear rango de fecha bonito para el subtítulo
+                // Si cruza de año/mes (ej. 29Dic-4Ene) hay que manejarlo manual o simple
+                let dateDisplay = "";
+                if (dayStart > dayEnd) { // Caso cruce de mes (ej 29Dic - 4Ene)
+                     // Hardcode simple para caso fin de año
+                     if (monthStr === 'Ene') dateDisplay = `29 de Dic - ${dayEnd} de ${monthStr}, 2026`;
+                     else dateDisplay = `${dayStart} - ${dayEnd} de ${monthStr}, ${year}`;
+                } else {
+                    dateDisplay = `${dayStart} de ${monthStr} - ${dayEnd} de ${monthStr}, ${year}`;
+                }
+
+                return {
+                    dateObj: new Date(year, monthIndex, dayEnd),
+                    display: dateDisplay
+                };
             }
-            return new Date(0); // Fecha muy antigua si falla
+            return { dateObj: new Date(0), display: filename };
         }
 
-        // Función principal asíncrona
         async function loadReports() {
             const grid = document.getElementById('report-grid');
             const loader = document.getElementById('loading');
 
             try {
-                // 1. Obtener lista de archivos
                 const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/`);
-                if (!response.ok) throw new Error('No se pudo conectar a GitHub');
+                if (!response.ok) throw new Error('Conexión GitHub fallida');
                 
                 const data = await response.json();
-                
-                // 2. Filtrar solo HTMLs de dashboard
                 let reportFiles = data.filter(f => f.name.startsWith('Dashboard') && f.name.endsWith('.html'));
 
-                // 3. Obtener contenido de cada archivo para extraer badges (fetch en paralelo)
                 const reportsWithContent = await Promise.all(reportFiles.map(async (file) => {
-                    const dateObj = parseDateFromFilename(file.name);
+                    const parsedInfo = parseDateFromFilename(file.name);
                     let badgesHtml = '';
                     let weekLabel = 'Reporte';
                     
                     try {
-                        // Descargar el HTML crudo del archivo
                         const res = await fetch(file.download_url);
                         const text = await res.text();
-                        
-                        // Parsear el HTML en memoria
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(text, 'text/html');
                         
-                        // BUSCAR BADGES: Buscamos el div con clase 'flex gap-2' que suele estar en el header
-                        // Filtramos para asegurarnos que sea el contenedor de badges y no otro flex
-                        const badgeContainer = Array.from(doc.querySelectorAll('.flex.gap-2')).find(el => {
-                            // Verificamos si tiene spans con clase 'badge' dentro
-                            return el.querySelector('.badge') !== null;
-                        });
+                        // Extraer badges del HTML
+                        const badgeContainer = Array.from(doc.querySelectorAll('.flex.gap-2')).find(el => el.querySelector('.badge') !== null);
+                        if (badgeContainer) badgesHtml = badgeContainer.innerHTML;
 
-                        if (badgeContainer) {
-                            badgesHtml = badgeContainer.innerHTML;
-                        }
+                        // Calcular Semana
+                        if (file.name.includes("29Dic")) weekLabel = "Semana 1";
+                        else weekLabel = "Semana " + getWeekNumber(parsedInfo.dateObj);
 
-                        // Calcular etiqueta de semana
-                        if (file.name.includes("29Dic")) {
-                            weekLabel = "Semana 1";
-                        } else {
-                            weekLabel = "Semana " + getWeekNumber(dateObj);
-                        }
-
-                    } catch (e) {
-                        console.error("Error parsing file:", file.name);
-                    }
+                    } catch (e) { console.error(e); }
 
                     return {
-                        name: file.name,
-                        date: dateObj, // Objeto Date para ordenar
+                        url: file.name,
+                        date: parsedInfo.dateObj,
+                        dateDisplay: parsedInfo.display,
                         week: weekLabel,
-                        cleanName: file.name.replace('Dashboard ', '').replace('.html', '').replace('-', ' - '),
                         badges: badgesHtml
                     };
                 }));
 
-                // 4. ORDENAR: Más reciente primero (Fecha descendente)
+                // Ordenar descendente
                 reportsWithContent.sort((a, b) => b.date - a.date);
 
-                // 5. Renderizar
                 loader.remove();
                 
                 reportsWithContent.forEach(report => {
                     const card = `
-                        <a href="${report.name}" class="report-card group">
+                        <a href="${report.url}" class="report-card group">
                             <div>
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-2xl font-bold text-white group-hover:text-teal-400 transition-colors">${report.week}</h3>
-                                    <svg class="w-5 h-5 text-slate-600 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                    </svg>
+                                <h3 class="card-title">${report.week}</h3>
+                                <p class="card-subtitle">${report.dateDisplay}</p>
+                                <div class="flex gap-2">
+                                    ${report.badges || '<span class="text-xs text-slate-600">Sin etiquetas</span>'}
                                 </div>
-                                <p class="text-slate-400 text-sm mb-6 font-mono">${report.cleanName}</p>
                             </div>
-                            
-                            <div class="pt-4 border-t border-slate-700/50 flex flex-wrap gap-2">
-                                ${report.badges || '<span class="text-xs text-slate-600 italic">Sin etiquetas</span>'}
+                            <div>
+                                <svg class="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                                </svg>
                             </div>
                         </a>
                     `;
@@ -188,12 +207,7 @@
                 });
 
             } catch (error) {
-                loader.innerHTML = `
-                    <div class="text-center text-red-400 bg-red-900/20 p-4 rounded-lg border border-red-900">
-                        <p class="font-bold">Error de Sistema</p>
-                        <p class="text-sm opacity-75">${error.message}</p>
-                    </div>
-                `;
+                loader.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
             }
         }
 

@@ -9,13 +9,7 @@
     <style>
         body { background-color: #0f172a; font-family: 'Inter', sans-serif; }
         
-        .report-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); 
-            gap: 1.5rem; 
-        }
-
-        /* Estilo de tarjeta basado en tu imagen */
+        /* Estilo de tarjeta (Nuevo diseño) */
         .report-card { 
             background-color: #1e293b; /* Slate 800 */
             border: 1px solid #334155; /* Slate 700 */
@@ -26,6 +20,7 @@
             justify-content: space-between;
             align-items: center;
             text-decoration: none;
+            height: 100%;
         }
 
         .report-card:hover { 
@@ -35,54 +30,51 @@
         }
 
         .card-title { font-size: 1.5rem; font-weight: 700; color: white; line-height: 1.2; }
-        .card-subtitle { color: #94a3b8; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 1rem; }
+        .card-subtitle { color: #94a3b8; font-size: 0.90rem; margin-top: 0.25rem; margin-bottom: 1rem; }
 
-        /* Badges estilo imagen */
+        /* Badges */
         .badge {
-            font-size: 0.75rem;
+            font-size: 0.70rem;
             padding: 4px 10px;
             border-radius: 6px;
             font-weight: 600;
             display: inline-block;
             margin-right: 0.5rem;
+            white-space: nowrap;
         }
-        /* Colores específicos para simular la imagen */
+        
         .badge-red, .badge[class*="bg-red"] { 
-            background-color: #451a1a !important; 
-            color: #fca5a5 !important; 
-            border: 1px solid #7f1d1d !important;
+            background-color: #451a1a !important; color: #fca5a5 !important; border: 1px solid #7f1d1d !important;
         }
         .badge-green, .badge[class*="bg-green"] { 
-            background-color: #143525 !important; 
-            color: #86efac !important; 
-            border: 1px solid #14532d !important;
+            background-color: #143525 !important; color: #86efac !important; border: 1px solid #14532d !important;
         }
         .badge-yellow, .badge[class*="bg-yellow"] { 
-            background-color: #422006 !important; 
-            color: #fde047 !important; 
-            border: 1px solid #713f12 !important;
+            background-color: #422006 !important; color: #fde047 !important; border: 1px solid #713f12 !important;
         }
         .badge-blue, .badge[class*="bg-blue"] { 
-            background-color: #172554 !important; 
-            color: #93c5fd !important; 
-            border: 1px solid #1e3a8a !important;
+            background-color: #172554 !important; color: #93c5fd !important; border: 1px solid #1e3a8a !important;
         }
 
-        .arrow-icon { color: #64748b; width: 24px; height: 24px; transition: color 0.2s; }
+        .arrow-icon { color: #64748b; width: 24px; height: 24px; transition: color 0.2s; min-width: 24px; }
         .report-card:hover .arrow-icon { color: #3b82f6; }
     </style>
 </head>
 <body class="min-h-screen text-slate-200 p-6 md:p-12">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="mb-12">
-            <h1 class="text-4xl font-bold text-white mb-2 tracking-tight">Archivo de Reportes Semanales</h1>
-            <p class="text-slate-400 text-lg">Selecciona un periodo para visualizar el rendimiento global y análisis de competencia</p>
+    <div class="max-w-7xl mx-auto">
+        <!-- Encabezado Centrado con Título Degradado -->
+        <header class="text-center mb-16">
+            <h1 class="text-4xl font-bold mb-4 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                Archivo de Reportes Semanales
+            </h1>
+            <p class="text-slate-400 text-lg">Selecciona un periodo para visualizar el rendimiento global y análisis de competencia.</p>
         </header>
 
-        <div id="report-grid" class="report-grid">
-            <div id="loading" class="col-span-full flex items-center gap-3 text-slate-500 py-10">
-                <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <!-- Grid: 3 columnas en pantallas grandes (lg) -->
+        <div id="report-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="loading" class="col-span-full flex justify-center items-center gap-3 text-slate-500 py-10">
+                <svg class="animate-spin h-5 w-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -108,24 +100,17 @@
         }
 
         function parseDateFromFilename(filename) {
-            // Regex para capturar rangos como "29Dic-4Ene" o "5-11Ene"
             const match = filename.match(/(\d+)(?:[a-zA-Z]+)?-(\d+)([a-zA-Z]+)/);
-            
             if (match) {
                 const dayStart = parseInt(match[1]);
                 const dayEnd = parseInt(match[2]);
                 const monthStr = match[3];
                 const monthIndex = monthMap[monthStr];
                 
-                // Lógica de año: Dic se asume año anterior (2025), Ene en adelante 2026
                 const year = (monthStr === 'Dic') ? 2025 : 2026;
-                const prevYear = (monthStr === 'Ene' && dayStart > dayEnd) ? 2025 : year;
-
-                // Formatear rango de fecha bonito para el subtítulo
-                // Si cruza de año/mes (ej. 29Dic-4Ene) hay que manejarlo manual o simple
                 let dateDisplay = "";
-                if (dayStart > dayEnd) { // Caso cruce de mes (ej 29Dic - 4Ene)
-                     // Hardcode simple para caso fin de año
+                
+                if (dayStart > dayEnd) { 
                      if (monthStr === 'Ene') dateDisplay = `29 de Dic - ${dayEnd} de ${monthStr}, 2026`;
                      else dateDisplay = `${dayStart} - ${dayEnd} de ${monthStr}, ${year}`;
                 } else {
@@ -162,11 +147,9 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(text, 'text/html');
                         
-                        // Extraer badges del HTML
                         const badgeContainer = Array.from(doc.querySelectorAll('.flex.gap-2')).find(el => el.querySelector('.badge') !== null);
                         if (badgeContainer) badgesHtml = badgeContainer.innerHTML;
 
-                        // Calcular Semana
                         if (file.name.includes("29Dic")) weekLabel = "Semana 1";
                         else weekLabel = "Semana " + getWeekNumber(parsedInfo.dateObj);
 
@@ -181,7 +164,6 @@
                     };
                 }));
 
-                // Ordenar descendente
                 reportsWithContent.sort((a, b) => b.date - a.date);
 
                 loader.remove();
@@ -189,10 +171,10 @@
                 reportsWithContent.forEach(report => {
                     const card = `
                         <a href="${report.url}" class="report-card group">
-                            <div>
+                            <div class="flex-1 pr-4">
                                 <h3 class="card-title">${report.week}</h3>
                                 <p class="card-subtitle">${report.dateDisplay}</p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     ${report.badges || '<span class="text-xs text-slate-600">Sin etiquetas</span>'}
                                 </div>
                             </div>
@@ -207,7 +189,7 @@
                 });
 
             } catch (error) {
-                loader.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
+                loader.innerHTML = `<p class="text-red-400 col-span-full text-center">Error: ${error.message}</p>`;
             }
         }
 

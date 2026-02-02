@@ -41,8 +41,8 @@
             <p class="text-gray-400 mt-1">Periodo: 26 Enero - 1 Febrero, 2026 | <span class="text-blue-400">Vista Ejecutiva</span></p>
         </div>
         <div class="flex gap-2">
-            <span class="badge badge-yellow">Active Deals Week</span>
-            <span class="badge badge-green">US Sales Record ($157k)</span>
+            <span class="badge badge-blue">Prep for Feb Deals</span>
+            <span class="badge badge-green">US Great Sales ($157k)</span>
         </div>
     </div>
 
@@ -50,22 +50,22 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="card">
             <p class="metric-label">Ventas Totales</p>
-            <p class="metric-value">$366,472</p>
-            <p class="metric-sub text-green-400">Volumen impulsado por Deals</p>
+            <p class="metric-value">$366,478</p>
+            <p class="metric-sub text-green-400">Impulsado por US Bari Bag</p>
         </div>
         <div class="card">
             <p class="metric-label">Net Profit (Total)</p>
-            <p class="metric-value text-green-400">$37,545</p>
+            <p class="metric-value text-green-400">$37,550</p>
             <p class="metric-sub text-gray-400">Estable vs Semana Anterior</p>
         </div>
         <div class="card">
             <p class="metric-label">Global TACOS</p>
             <p class="metric-value text-green-400">19.85%</p>
-            <p class="metric-sub text-gray-400">Objetivo (Deals): 20.57%</p>
+            <p class="metric-sub text-gray-400">Objetivo: 20.57%</p>
         </div>
         <div class="card border-red-900">
             <p class="metric-label">Global Margin</p>
-            <p class="metric-value text-red-400">10.24%</p>
+            <p class="metric-value text-red-400">10.25%</p>
             <p class="metric-sub text-gray-400">Objetivo: 14.24%</p>
         </div>
     </div>
@@ -104,11 +104,11 @@
             
             <div class="comp-card listing">
                 <div class="flex justify-between">
-                    <span class="font-bold text-sm text-white">Lanzamiento Fallido</span>
+                    <span class="font-bold text-sm text-white">Lanzamiento Lento</span>
                     <span class="text-xs text-red-400 font-bold">Milano US</span>
                 </div>
-                <p class="text-xs text-gray-300 mt-1">Cero ventas, tráfico muy bajo. Momcozy y Baby Brezza dominan.</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"Ajuste de bids realizado, esperando datos. Se necesita A+ urgentemente."</p>
+                <p class="text-xs text-gray-300 mt-1">Cero ventas orgánicas. Competencia (Momcozy) domina.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Recopilando datos de PPC. Ajuste de bids realizado."</p>
                 <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Status: Critical</div>
             </div>
 
@@ -118,22 +118,22 @@
                     <span class="text-xs text-yellow-400 font-bold">Napoli US</span>
                 </div>
                 <p class="text-xs text-gray-300 mt-1">Competencia $19-$28 vs nuestros $39.99.</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"A pesar del Deal, el margen es negativo (-$699). Estrategia de alineación orgánica en curso."</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Margen negativo (-$699). Deal activo esta semana."</p>
             </div>
 
             <div class="comp-card rating">
                 <div class="flex justify-between">
                     <span class="font-bold text-sm text-white">Ratings</span>
-                    <span class="text-xs text-yellow-400 font-bold">Siena</span>
+                    <span class="text-xs text-blue-400 font-bold">Siena CA</span>
                 </div>
-                <p class="text-xs text-gray-300 mt-1">Siena CA reaccionó al precio bajo (CVR subió), pero el rating 3.8 limita el crecimiento orgánico.</p>
-                <p class="text-xs text-gray-400 mt-2 italic">"Mantener margen negativo (-50%) para forzar tráfico."</p>
+                <p class="text-xs text-gray-300 mt-1">CVR subió tras bajada de precio, pero el rating 3.8 limita.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Mantener margen -50% para forzar tráfico y recuperar posición."</p>
             </div>
         </div>
 
         <div class="card lg:col-span-2 overflow-hidden flex flex-col">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg">Estado de Productos y Decisiones</h3>
+                <h3 class="font-bold text-lg">Estado de Productos y Decisiones (Próxima Semana)</h3>
                 <div class="flex gap-1">
                     <button onclick="filterTable('all')" class="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded text-white">Todos</button>
                     <button onclick="filterTable('US')" class="px-3 py-1 text-xs bg-blue-900 hover:bg-blue-800 rounded text-blue-100">US</button>
@@ -163,13 +163,13 @@
     <script>
         // --- DATA ---
         // Datos extraídos para la semana 26 Ene - 01 Feb 2026
-        // Conversiones aprox: EUR 1.05, GBP 1.25, CAD 0.72
+        // Las decisiones corresponden a la semana del 2 Feb en adelante.
         
         const products = [
             // US Data
             { mkt: 'US', name: 'Bari', rev: 5862, profit: -1539, status: 'CVR Growing / Neg Profit', decision: 'Mantener (Trend positivo)', level: 'improving' },
-            { mkt: 'US', name: 'Bari Bag', rev: 130207, profit: 15732, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
-            { mkt: 'US', name: 'Napoli', rev: 19333, profit: -699, status: 'High Vol / Negative Profit', decision: 'Deal activo (Alignment)', level: 'watch' },
+            { mkt: 'US', name: 'Bari Bag', rev: 130207, profit: 15732, status: 'Dominating #1 / Sales 🚀', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'US', name: 'Napoli', rev: 19333, profit: -699, status: 'High Vol / Negative Profit', decision: 'Deal Activo', level: 'watch' },
             { mkt: 'US', name: 'Siena', rev: 2182, profit: -1351, status: 'Rating Issue (3.9)', decision: 'Mantener precio bajo', level: 'critical' },
             { mkt: 'US', name: 'Palermo', rev: 140, profit: -1152, status: 'Not Indexed / Heavy PPC', decision: 'PPC Push + A+ Content', level: 'critical' },
             { mkt: 'US', name: 'Milano', rev: 0, profit: -24, status: 'Launch / No Sales', decision: 'Ajuste Bids (Wait data)', level: 'watch' },
@@ -177,34 +177,34 @@
             
             // CA Data
             { mkt: 'CA', name: 'Bari', rev: 3654, profit: 496, status: 'Recovering CVR', decision: 'Mantener', level: 'improving' },
-            { mkt: 'CA', name: 'Bari Bag', rev: 12671, profit: 1547, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
-            { mkt: 'CA', name: 'Napoli', rev: 6662, profit: 517, status: 'Good Rank / Deal Active', decision: 'Deal activo', level: 'top' },
+            { mkt: 'CA', name: 'Bari Bag', rev: 12671, profit: 1547, status: 'Dominating #1 / Strong Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'CA', name: 'Napoli', rev: 6662, profit: 517, status: 'Good Rank / Solid', decision: 'Mantener', level: 'top' },
             { mkt: 'CA', name: 'Siena', rev: 145, profit: 8, status: 'CVR Up / Low Traffic', decision: 'PPC Push (Margen -50%)', level: 'watch' },
 
             // UK Data
-            { mkt: 'UK', name: 'Bari', rev: 3157, profit: 271, status: 'Good Rank / Poor Sales', decision: 'Deal activo', level: 'watch' },
-            { mkt: 'UK', name: 'Bari Bag', rev: 16086, profit: 1253, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
-            { mkt: 'UK', name: 'Napoli', rev: 8302, profit: 1421, status: 'Good Rank / Deal Active', decision: 'Deal activo', level: 'top' },
+            { mkt: 'UK', name: 'Bari', rev: 3157, profit: 271, status: 'Good Rank / Poor Sales', decision: 'Deal Activo', level: 'watch' },
+            { mkt: 'UK', name: 'Bari Bag', rev: 16086, profit: 1253, status: 'Dominating #1 / Great Sales', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'UK', name: 'Napoli', rev: 8302, profit: 1421, status: 'Good Rank / Profitable', decision: 'Deal Activo', level: 'top' },
 
             // DE Data
-            { mkt: 'DE', name: 'Bari', rev: 4223, profit: 483, status: 'Good Rank / Sales OK', decision: 'Deal activo', level: 'top' },
-            { mkt: 'DE', name: 'Bari Bag', rev: 4158, profit: 248, status: 'Good Rank / Poor Sales', decision: 'Deal activo', level: 'watch' },
-            { mkt: 'DE', name: 'Napoli', rev: 8989, profit: 1698, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
+            { mkt: 'DE', name: 'Bari', rev: 4223, profit: 483, status: 'Good Rank / Sales OK', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'DE', name: 'Bari Bag', rev: 4158, profit: 248, status: 'Good Rank / Poor Sales', decision: 'Deal Activo', level: 'watch' },
+            { mkt: 'DE', name: 'Napoli', rev: 8989, profit: 1698, status: 'Dominating #1 / Great Sales', decision: 'Deal Activo', level: 'top' },
 
             // FR Data
-            { mkt: 'FR', name: 'Bari', rev: 16586, profit: 2384, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
-            { mkt: 'FR', name: 'Bari Bag', rev: 8027, profit: 1126, status: 'Good Rank / Sales OK', decision: 'Deal activo', level: 'top' },
-            { mkt: 'FR', name: 'Napoli', rev: 12915, profit: 1707, status: 'Good Rank / Strong Sales', decision: 'Deal activo', level: 'top' },
+            { mkt: 'FR', name: 'Bari', rev: 16586, profit: 2384, status: 'Dominating #1 / High Vol', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'FR', name: 'Bari Bag', rev: 8027, profit: 1126, status: 'Good Rank / Sales OK', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'FR', name: 'Napoli', rev: 12915, profit: 1707, status: 'Good Rank / Strong Sales', decision: 'Deal Activo', level: 'top' },
 
             // IT Data
-            { mkt: 'IT', name: 'Bari', rev: 37133, profit: 5550, status: 'Cash Cow / #1', decision: 'Deal activo', level: 'top' },
-            { mkt: 'IT', name: 'Bari Bag', rev: 12304, profit: 1685, status: 'Bad Rank / Sales OK', decision: 'Deal activo', level: 'watch' },
-            { mkt: 'IT', name: 'Napoli', rev: 16502, profit: 2639, status: 'Bad Rank / Strong Sales', decision: 'Deal activo', level: 'top' },
+            { mkt: 'IT', name: 'Bari', rev: 37133, profit: 5550, status: 'Cash Cow / #1', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'IT', name: 'Bari Bag', rev: 12304, profit: 1685, status: 'Bad Rank / Sales OK', decision: 'Deal Activo', level: 'watch' },
+            { mkt: 'IT', name: 'Napoli', rev: 16502, profit: 2639, status: 'Bad Rank / Strong Sales', decision: 'Deal Activo', level: 'top' },
 
             // ES Data
-            { mkt: 'ES', name: 'Bari', rev: 9986, profit: 459, status: 'Good Rank / Sales OK', decision: 'Deal activo', level: 'top' },
-            { mkt: 'ES', name: 'Bari Bag', rev: 17218, profit: 2767, status: 'Dominating #1 / Deal Active', decision: 'Deal activo', level: 'top' },
-            { mkt: 'ES', name: 'Napoli', rev: 9844, profit: 785, status: 'Good Rank / Sales OK', decision: 'Deal activo', level: 'top' }
+            { mkt: 'ES', name: 'Bari', rev: 9986, profit: 459, status: 'Good Rank / Sales OK', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'ES', name: 'Bari Bag', rev: 17218, profit: 2767, status: 'Dominating #1 / Great Sales', decision: 'Deal Activo', level: 'top' },
+            { mkt: 'ES', name: 'Napoli', rev: 9844, profit: 785, status: 'Good Rank / Sales OK', decision: 'Deal Activo', level: 'top' }
         ];
 
         // --- CHART 1: PROFIT BY MARKET (Estimated in USD) ---

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Fullnow - Sem 6, 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #111827; color: #f3f4f6; font-family: 'Inter', sans-serif; }
+        .card { background-color: #1f2937; border: 1px solid #374151; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .metric-label { color: #9ca3af; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: white; }
+        .metric-sub { font-size: 0.75rem; margin-top: 0.5rem; }
+        
+        /* Badges */
+        .badge { padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .badge-red { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
+        .badge-green { background-color: #14532d; color: #86efac; border: 1px solid #15803d; }
+        .badge-yellow { background-color: #713f12; color: #fde047; border: 1px solid #a16207; }
+        .badge-blue { background-color: #1e3a8a; color: #93c5fd; border: 1px solid #1d4ed8; }
+
+        /* Table */
+        th { color: #d1d5db; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+        td { color: #e5e7eb; font-size: 0.875rem; vertical-align: middle; }
+        tr:hover td { background-color: #374151; }
+        
+        /* Competitor Cards */
+        .comp-card { background-color: #283040; border-left: 4px solid; padding: 15px; margin-bottom: 10px; border-radius: 6px; }
+        .comp-card.price { border-color: #facc15; }
+        .comp-card.rating { border-color: #f87171; }
+        .comp-card.listing { border-color: #60a5fa; }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-7xl mx-auto">
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Dashboard Semanal de Rendimiento</h1>
+            <p class="text-gray-400 mt-1">Periodo: 2 Febrero - 8 Febrero, 2026 | <span class="text-blue-400">Vista Ejecutiva</span></p>
+        </div>
+        <div class="flex gap-2">
+            <span class="badge badge-green">Goal Hit: Margin > 15%</span>
+            <span class="badge badge-blue">Global Deals Active</span>
+        </div>
+    </div>
+
+    <!-- Top Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="card">
+            <p class="metric-label">Ventas Totales</p>
+            <p class="metric-value">$372,500</p>
+            <p class="metric-sub text-green-400">Impulsado por Deals Globales</p>
+        </div>
+        <div class="card">
+            <p class="metric-label">Net Profit (Total)</p>
+            <p class="metric-value text-green-400">$57,181</p>
+            <p class="metric-sub text-gray-400">Gran recuperación vs Sem 5</p>
+        </div>
+        <div class="card">
+            <p class="metric-label">Global TACOS</p>
+            <p class="metric-value text-yellow-400">13.80%</p>
+            <p class="metric-sub text-gray-400">Objetivo: 10.07%</p>
+        </div>
+        <div class="card border-green-800">
+            <p class="metric-label">Global Margin</p>
+            <p class="metric-value text-green-400">15.35%</p>
+            <p class="metric-sub text-gray-400">Objetivo: 15.28% (Cumplido)</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card">
+            <div class="flex justify-between mb-4">
+                <h3 class="font-bold text-lg">Profit Real por Mercado (USD Est.)</h3>
+                <span class="text-xs text-gray-500">*Conversión divisa aplicada</span>
+            </div>
+            <div class="h-64">
+                <canvas id="profitMarketChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-400 mt-3 text-center">US lidera con $19.8k, seguido de Italia ($12.5k). Todos los mercados rentables.</p>
+        </div>
+
+        <div class="card">
+            <h3 class="font-bold text-lg mb-4">Mapa de Rendimiento (Todos los Mercados)</h3>
+            <div class="h-64">
+                <canvas id="scatterChart"></canvas>
+            </div>
+            <div class="flex justify-center gap-4 mt-2 text-xs text-gray-400">
+                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-green-500"></div> Rentable</div>
+                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-red-500"></div> Pérdida</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        <div class="card lg:col-span-1">
+            <h3 class="font-bold text-lg mb-4 text-white flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Amenazas Competitivas
+            </h3>
+            
+            <div class="comp-card listing">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Stock Antiguo</span>
+                    <span class="text-xs text-red-400 font-bold">Siena US</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1">Ventas muy bajas y fees de almacenamiento acumulándose.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Decisión: Bajar precio a $34.99 para acelerar liquidación."</p>
+                <div class="mt-2 text-xs bg-gray-700 p-1 rounded text-center">Status: Critical</div>
+            </div>
+
+            <div class="comp-card price">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Competencia Precio</span>
+                    <span class="text-xs text-yellow-400 font-bold">Napoli Global</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1">Competidores ($19-33) vs Napoli ($39). Margen negativo en US.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Mantener estrategia durante Deal week, revisar post-deal."</p>
+            </div>
+
+            <div class="comp-card rating">
+                <div class="flex justify-between">
+                    <span class="font-bold text-sm text-white">Lanzamiento</span>
+                    <span class="text-xs text-blue-400 font-bold">Milano</span>
+                </div>
+                <p class="text-xs text-gray-300 mt-1">Ventas orgánicas casi nulas en US/CA.</p>
+                <p class="text-xs text-gray-400 mt-2 italic">"Continuar PPC agresivo y esperar A+ Content para mejorar CVR."</p>
+            </div>
+        </div>
+
+        <div class="card lg:col-span-2 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Estado de Productos y Decisiones</h3>
+                <div class="flex gap-1">
+                    <button onclick="filterTable('all')" class="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded text-white">Todos</button>
+                    <button onclick="filterTable('US')" class="px-3 py-1 text-xs bg-blue-900 hover:bg-blue-800 rounded text-blue-100">US</button>
+                    <button onclick="filterTable('EU')" class="px-3 py-1 text-xs bg-indigo-900 hover:bg-indigo-800 rounded text-indigo-100">EU</button>
+                    <button onclick="filterTable('CA')" class="px-3 py-1 text-xs bg-red-900 hover:bg-red-800 rounded text-red-100">CA</button>
+                </div>
+            </div>
+            
+            <div class="overflow-y-auto pr-2" style="max-height: 400px;">
+                <table class="w-full text-left">
+                    <thead class="sticky top-0 bg-gray-800 z-10">
+                        <tr>
+                            <th class="p-3">Mkt</th>
+                            <th class="p-3">Producto</th>
+                            <th class="p-3">Status / Problema</th>
+                            <th class="p-3">Decisión Tomada</th>
+                            <th class="p-3 text-center">Nivel</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody" class="divide-y divide-gray-700 text-sm">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Datos extraídos para la semana 02 Feb - 08 Feb 2026
+        // Conversiones aprox: EUR 1.05, GBP 1.25, CAD 0.72
+        
+        const products = [
+            // US Data
+            { mkt: 'US', name: 'Bari', rev: 3188, profit: -1115, status: 'Bad Rank / Poor Sales', decision: 'Mantener', level: 'critical' },
+            { mkt: 'US', name: 'Bari Bag', rev: 123409, profit: 26880, status: 'Dominating #1 / Deal 🚀', decision: 'Mantener', level: 'top' },
+            { mkt: 'US', name: 'Napoli', rev: 15549, profit: -878, status: 'Price Pressure / Neg Profit', decision: 'Mantener', level: 'watch' },
+            { mkt: 'US', name: 'Siena', rev: 2478, profit: -2246, status: 'Aging Inventory / Rating', decision: 'Bajar precio a $34.99', level: 'critical' },
+            { mkt: 'US', name: 'Palermo', rev: 1259, profit: -2167, status: 'PPC Heavy / Ranking Push', decision: 'Mantener', level: 'critical' },
+            { mkt: 'US', name: 'Milano', rev: 419, profit: -138, status: 'Launch Phase / Low Vol', decision: 'Mantener (PPC Push)', level: 'watch' },
+            { mkt: 'US', name: 'Maps', rev: 287, profit: -380, status: 'Bad Rank / Poor Sales', decision: 'Mantener', level: 'critical' },
+            
+            // CA Data
+            { mkt: 'CA', name: 'Bari', rev: 4959, profit: 589, status: 'Improving Rank', decision: 'Mantener', level: 'improving' },
+            { mkt: 'CA', name: 'Bari Bag', rev: 17253, profit: 3800, status: 'Dominating #1 / Strong Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'CA', name: 'Napoli', rev: 7680, profit: 1744, status: 'Good Rank / Profitable', decision: 'Mantener', level: 'top' },
+            { mkt: 'CA', name: 'Siena', rev: 359, profit: -24, status: 'CVR Up / Low Traffic', decision: 'Mantener', level: 'watch' },
+            { mkt: 'CA', name: 'Milano', rev: 0, profit: -37, status: 'Launch / No Sales', decision: 'Mantener (PPC Push)', level: 'critical' },
+
+            // UK Data
+            { mkt: 'UK', name: 'Bari', rev: 2882, profit: 430, status: 'Good Rank / Sales OK', decision: 'Mantener', level: 'watch' },
+            { mkt: 'UK', name: 'Bari Bag', rev: 7265, profit: 863, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'UK', name: 'Napoli', rev: 7631, profit: 1495, status: 'Good Rank / Profitable', decision: 'Mantener', level: 'top' },
+
+            // DE Data
+            { mkt: 'DE', name: 'Bari', rev: 6614, profit: 1320, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'DE', name: 'Bari Bag', rev: 4455, profit: 629, status: 'Good Rank / Sales OK', decision: 'Reducir margen al 13%', level: 'improving' },
+            { mkt: 'DE', name: 'Napoli', rev: 11529, profit: 2054, status: 'Dominating #1 / Great Sales', decision: 'Mantener', level: 'top' },
+
+            // FR Data
+            { mkt: 'FR', name: 'Bari', rev: 14872, profit: 2553, status: 'Good Rank / #2', decision: 'Mantener', level: 'top' },
+            { mkt: 'FR', name: 'Bari Bag', rev: 9682, profit: 1471, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'FR', name: 'Napoli', rev: 18429, profit: 2875, status: 'Good Rank / #1', decision: 'Mantener', level: 'top' },
+
+            // IT Data
+            { mkt: 'IT', name: 'Bari', rev: 44676, profit: 7205, status: 'Cash Cow / #1', decision: 'Mantener', level: 'top' },
+            { mkt: 'IT', name: 'Bari Bag', rev: 17154, profit: 2818, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'IT', name: 'Napoli', rev: 11511, profit: 1954, status: 'Price Pressure / Good Vol', decision: 'Reducir margen al 14%', level: 'watch' },
+
+            // ES Data
+            { mkt: 'ES', name: 'Bari', rev: 5757, profit: 223, status: 'Bad Rank / Great Sales', decision: 'Reducir margen al 13%', level: 'watch' },
+            { mkt: 'ES', name: 'Bari Bag', rev: 19513, profit: 3658, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' },
+            { mkt: 'ES', name: 'Napoli', rev: 10136, profit: 1305, status: 'Good Rank / Great Sales', decision: 'Mantener', level: 'top' }
+        ];
+
+        // --- CHART 1: PROFIT BY MARKET (Estimated in USD) ---
+        const ctxMkt = document.getElementById('profitMarketChart').getContext('2d');
+        new Chart(ctxMkt, {
+            type: 'bar',
+            data: {
+                labels: ['US', 'IT', 'FR', 'ES', 'CA', 'DE', 'UK'],
+                datasets: [{
+                    label: 'Profit Real (USD Est.)',
+                    data: [19859, 12575, 7243, 5445, 4371, 4203, 3485],
+                    backgroundColor: [
+                        '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981', '#10b981'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#374151' }, ticks: { color: '#9ca3af', callback: v => '$' + v } },
+                    x: { grid: { display: false }, ticks: { color: '#fff', font: { weight: 'bold' } } }
+                }
+            }
+        });
+
+        // --- CHART 2: SCATTER PLOT ALL PRODUCTS ---
+        const scatterData = products.map(p => ({
+            x: p.rev, 
+            y: p.profit,
+            label: `${p.mkt} ${p.name}`,
+            bg: p.profit > 0 ? '#10b981' : '#ef4444'
+        }));
+
+        const ctxScatter = document.getElementById('scatterChart').getContext('2d');
+        new Chart(ctxScatter, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Productos',
+                    data: scatterData,
+                    backgroundColor: c => c.raw.bg,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleColor: '#fff',
+                        bodyColor: '#d1d5db',
+                        callbacks: {
+                            label: (ctx) => {
+                                const p = ctx.raw;
+                                return `${p.label}: Rev ${p.x.toLocaleString()} | Profit ${p.y.toLocaleString()}`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { 
+                        type: 'logarithmic', 
+                        title: { display: true, text: 'Revenue (Log Scale)', color: '#6b7280' },
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af', callback: v => v.toLocaleString() }
+                    },
+                    y: { 
+                        title: { display: true, text: 'Profit (Local Curr)', color: '#6b7280' },
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // --- TABLE LOGIC ---
+        const tableBody = document.getElementById('productsBody');
+
+        function renderTable(filter) {
+            tableBody.innerHTML = '';
+            let filteredProducts = products;
+            
+            if (filter !== 'all') {
+                if (filter === 'EU') {
+                    filteredProducts = products.filter(p => ['UK','IT','FR','DE','ES'].includes(p.mkt));
+                } else {
+                    filteredProducts = products.filter(p => p.mkt === filter);
+                }
+            }
+
+            filteredProducts.forEach(p => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 last:border-0 hover:bg-gray-800 transition-colors';
+                
+                let badge = '';
+                switch(p.level) {
+                    case 'critical':
+                        badge = `<span class="badge badge-red">🚨 Critical</span>`;
+                        break;
+                    case 'top':
+                        badge = `<span class="badge badge-green">🚀 Top</span>`;
+                        break;
+                    case 'improving':
+                        badge = `<span class="badge badge-blue">📈 Improving</span>`;
+                        break;
+                    default:
+                        badge = `<span class="badge badge-yellow">⚠️ Watch</span>`;
+                }
+
+                row.innerHTML = `
+                    <td class="p-3"><span class="font-bold text-gray-400">${p.mkt}</span></td>
+                    <td class="p-3 font-bold text-white">${p.name}</td>
+                    <td class="p-3 text-gray-300 text-xs">${p.status}</td>
+                    <td class="p-3 text-blue-300 text-xs">${p.decision}</td>
+                    <td class="p-3 text-center">${badge}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterTable(region) {
+            renderTable(region);
+        }
+
+        // Init
+        renderTable('all');
+
+    </script>
+</body>
+</html>
